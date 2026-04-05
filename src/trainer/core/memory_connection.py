@@ -56,9 +56,7 @@ class MemoryConnection:
         try:
             self.__pm = pymem.Pymem(process_name)
 
-            module = pymem.process.module_from_name(
-                self.__pm.process_handle, process_name  # type: ignore[arg-type]
-            )
+            module = pymem.process.module_from_name(self.__pm.process_handle, process_name)
 
             if module is None:
                 raise RuntimeError(f"Module '{process_name}' not found.")
@@ -72,6 +70,7 @@ class MemoryConnection:
 
     @property
     def pm(self) -> pymem.Pymem:
+        
         """
         The active `pymem.Pymem` process handle.
 

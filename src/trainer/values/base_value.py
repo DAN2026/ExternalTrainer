@@ -26,6 +26,7 @@ class BaseValue(ABC):
     @property
     @abstractmethod
     def base_offset(self) -> int:
+        
         """
         Static offset from the `module base address`.
 
@@ -36,6 +37,7 @@ class BaseValue(ABC):
     @property
     @abstractmethod
     def offsets(self) -> list[int]:
+        
         """
         Ordered list of `pointer chain offsets`.
 
@@ -49,6 +51,7 @@ class BaseValue(ABC):
     @property
     @abstractmethod
     def value_type(self) -> str:
+        
         """
         Type key used to look up read/write methods in `TYPE_REGISTRY`.
 
@@ -59,9 +62,11 @@ class BaseValue(ABC):
 
     @property
     def _conn(self) -> MemoryConnection:
+        
         return self.__conn
 
     def _resolve(self) -> Address | None:
+        
         try:
             addr: Address = self.__conn.pm.read_longlong(
                 self.__conn.module_base + self.base_offset
@@ -76,6 +81,7 @@ class BaseValue(ABC):
             return None
 
     def get(self) -> MemoryValue | None:
+        
         """
         Read the current value from memory.
 
@@ -121,6 +127,7 @@ class BaseValue(ABC):
             return None
 
     def set(self, value: MemoryValue) -> bool:
+        
         """
         Write a new value to memory.
 
