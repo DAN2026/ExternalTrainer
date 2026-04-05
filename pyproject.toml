@@ -12,16 +12,3 @@ dependencies = [
 
 [tool.setuptools.packages.find]
 where = ["src"]
-
-[tool.pyright]
-pythonVersion = "3.14"
-pythonPlatform = "Windows"
-include = ["src"]
-# Switched from strict to basic to prevent "Unknown" type errors
-typeCheckingMode = "basic" 
-reportMissingTypeStubs = false
-reportUnknownMemberType = false
-reportUnknownVariableType = false
-reportUnknownArgumentType = false
-# This addresses the "Object of type None cannot be called" error
-reportOptionalCall = "warning"

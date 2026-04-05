@@ -4,6 +4,7 @@ from loguru import logger
 
 
 class MemoryConnection:
+    
     """
     Single shared handle to the target process.
 
@@ -22,6 +23,7 @@ class MemoryConnection:
     __module_base: int | None
 
     def __init__(self, process_name: str) -> None:
+        
         """
         Attach to a running process by name.
 
@@ -38,6 +40,7 @@ class MemoryConnection:
 
 
     def __attach(self, process_name: str) -> None:
+        
         """
         Open the process handle and resolve the `module base address`.
 
@@ -82,6 +85,7 @@ class MemoryConnection:
 
     @property
     def module_base(self) -> int:
+        
         """
         The `base address` of the process module in memory.
 
@@ -91,11 +95,14 @@ class MemoryConnection:
         """
 
         if self.__module_base is None:
+            
             raise RuntimeError("Module base not resolved.")
+        
         return self.__module_base
 
     @property
     def is_alive(self) -> bool:
+        
         """
         `True` if both the process handle and module base are active.
         """

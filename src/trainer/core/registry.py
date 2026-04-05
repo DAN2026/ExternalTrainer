@@ -6,7 +6,8 @@ type CastFn = Callable[[object], object]
 type RegistryEntry = tuple[ReadMethod, WriteMethod, CastFn]
 
 TYPE_REGISTRY: dict[str, RegistryEntry] = {
-    "float":        ("read_float",     "write_float",     float),  # type: ignore[dict-item]
+    
+    "float":        ("read_float",     "write_float",     float),  
     "double":       ("read_double",    "write_double",    float),  # type: ignore[dict-item]
     "int":          ("read_int",       "write_int",       int),    # type: ignore[dict-item]
     "short":        ("read_short",     "write_short",     int),    # type: ignore[dict-item]
