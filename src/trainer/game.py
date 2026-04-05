@@ -1,6 +1,6 @@
 from trainer.core.memory_connection import MemoryConnection
 from trainer.values.fov import FovValue
-
+from trainer.values.prevviewmode import PreviewmodeValue
 
 class ShooterGame:
     
@@ -9,3 +9,5 @@ class ShooterGame:
         conn = MemoryConnection("ShooterGame.exe")
 
         self.fov = FovValue(conn)
+        
+        self.previewmode = PreviewmodeValue(conn)
