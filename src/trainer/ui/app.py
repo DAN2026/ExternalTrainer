@@ -1,133 +1,155 @@
+from typing import Dict, List, Type, Union, Callable, Any
 import dearpygui.dearpygui as dpg
-from trainer.ui.handlers.mouse import MouseHandler
+from loguru import logger
+
+from trainer.memory.game import ShooterGame
 from trainer.ui.handlers.base import BaseHandler
-from trainer.ui.styles.font import Fonts
-from trainer.ui.styles.themes import Themes
+from trainer.ui.handlers.mouse import MouseHandler
+
+from trainer.ui.components.base import BaseComponent
 from trainer.ui.components.header import HeaderComponent
 from trainer.ui.components.navbar import NavbarComponent
-from trainer.ui.components.visuals import VisualsComponent
-from trainer.ui.components.debug import DebugComponent
-from trainer.ui.components.logs import LogsComponent
-from trainer.ui.components.settings import SettingsComponent
-from trainer.ui.styles.base import BaseStyle
-from trainer.ui.components.toggle import Toggle
-from trainer.ui.styles import fonts, themes, icons
-from loguru import logger
-from trainer.memory.game import ShooterGame
+from trainer.ui.components.footer import FooterComponent
 
-class App():
+from trainer.ui.pages.base import BasePage
+from trainer.ui.pages.visuals import VisualsPage
+from trainer.ui.pages.debug import DebugPage
+from trainer.ui.pages.logs import LogsPage
+from trainer.ui.pages.settings import SettingsPage
+
+from trainer.ui.styles import fonts, themes, icons
+
+class App:
+    """
+    Main Application controller responsible for lifecycle management, 
+    window configuration, and coordinating pages and components.
+    """
+    __slots__ = (
+        "__ARK", "__active_handlers", "__registry", 
+        "__HANDLERS", "__UI_ELEMENTS", "__PAGE_TAGS"
+    )
+
+    __WINDOW_WIDTH: int = 450
+    __WINDOW_HEIGHT: int = 600
+    __WINDOW_NAME: str = "Arkopedia"
     
-    __WINDOW_WIDTH = 450
-    __WINDOW_HEIGHT = 600
-    __WINDOW_NAME = "Arkopedia"
-    
+    __CONTENT_X: float = 12.5
+    __CONTENT_Y: float = 148.5 
+
     def __init__(self) -> None:
-        
-    
+        """
+        Initializes the application core services and UI definitions.
+        """
         logger.info("App initializing")
         
-        self.__HANDLERS: list[type[BaseHandler]] = [MouseHandler]
-        self.__active_handlers = []
-        self.__STYLES: list[BaseStyle] = []
-        self.__ARK = ShooterGame()
+        self.__ARK: ShooterGame = ShooterGame()
+        self.__HANDLERS: List[Type[BaseHandler]] = [MouseHandler]
+        self.__active_handlers: List[BaseHandler] = []
         
-        
-    def __register_handlers(self) -> None:
-        
-        for instance in self.__HANDLERS:
-            
-            handler = instance()
-            
-            handler.register() 
-            
-            self.__active_handlers.append(handler)
-        
-        logger.success(f"Registered handlers: {self.__active_handlers}")
-    
-    
-    def __change_page(self, target_tag: str) -> None:
-        pages = ["visual-container", "logs-container", "debug-container", "settings-container"]
-        
-        CONTENT_X = 12.5
-        CONTENT_Y = 148.5 
+        self.__registry: Dict[str, Union[BaseComponent, BasePage]] = {}
 
-        for page in pages:
-            if dpg.does_item_exist(page):
-                is_target = (page == target_tag)
-                
-                dpg.configure_item(page, show=is_target)
+        self.__UI_ELEMENTS: List[Type[Union[BaseComponent, BasePage]]] = [
+            HeaderComponent,
+            NavbarComponent,
+            VisualsPage,
+            DebugPage,
+            LogsPage,
+            SettingsPage,
+            FooterComponent
+        ]
+
+        self.__PAGE_TAGS: List[str] = [
+            "visual-container", 
+            "logs-container", 
+            "debug-container", 
+            "settings-container"
+        ]
+
+    def __register_handlers(self) -> None:
+        """
+        Instantiates and registers input handlers.
+        """
+        for handler_class in self.__HANDLERS:
+            handler = handler_class()
+            handler.register() 
+            self.__active_handlers.append(handler)
+            
+        logger.success(f"Registered handlers: {len(self.__active_handlers)}")
+
+    def __change_page(self, target_tag: str) -> None:
+        """
+        Swaps the visible content area based on the provided DPG tag.
+
+        Args:
+            target_tag (str): The tag of the child window to display.
+        """
+        for page_tag in self.__PAGE_TAGS:
+            if dpg.does_item_exist(page_tag):
+                is_target = (page_tag == target_tag)
+                dpg.configure_item(page_tag, show=is_target)
                 
                 if is_target:
-                    dpg.set_item_pos(page, [CONTENT_X, CONTENT_Y])
-                    themes.apply(page, themes.container)
-        
-            
+                    dpg.set_item_pos(page_tag, [self.__CONTENT_X, self.__CONTENT_Y])
+
     def __on_tick(self) -> None:
-        self.navbar.tick()
-        self.visual.tick()
-    
+        """
+        Propagates the tick update to all active UI elements.
+        """
+        for element in self.__registry.values():
+            element.tick()
+
     def start(self) -> None:
-        
-        
+        """
+        Initializes the DPG context, builds the UI, and starts the render loop.
+        """
         dpg.create_context()
-        dpg.create_viewport(title=self.__WINDOW_NAME, width=self.__WINDOW_WIDTH, height=self.__WINDOW_HEIGHT, decorated=False)
+        
+        dpg.create_viewport(
+            title=self.__WINDOW_NAME, 
+            width=self.__WINDOW_WIDTH, 
+            height=self.__WINDOW_HEIGHT, 
+            decorated=False
+        )
         dpg.setup_dearpygui()
 
         fonts.register() 
-        
         icons.register()
 
         with dpg.window(tag="main_window"):
             
+            # Logic for dependency injection during instantiation
             
-            self.header = HeaderComponent().build()
-            
-            self.navbar = NavbarComponent(on_page_change=self.__change_page)
-            
-            self.navbar.build()
-            
-            self.visual = VisualsComponent(ark=self.__ARK)
-            
-            self.visual.build()
-            
-            DebugComponent().build()
-            
-            LogsComponent().build()
-            
-            SettingsComponent().build()
-            
+            element_factories: Dict[Type, Callable[[], Any]] = {
+                NavbarComponent: lambda: NavbarComponent(on_page_change=self.__change_page),
+                VisualsPage: lambda: VisualsPage(ark=self.__ARK),
+                FooterComponent: lambda: FooterComponent(ark=self.__ARK),
+                
+                DebugPage: lambda: DebugPage(), 
+                LogsPage: lambda: LogsPage(),
+                SettingsPage: lambda: SettingsPage(),
+            }
+
+            for ui_class in self.__UI_ELEMENTS:
+                factory = element_factories.get(ui_class, ui_class)
+                instance = factory()
+                
+                instance.build()
+                self.__registry[ui_class.__name__] = instance
+
             self.__change_page("visual-container")
-            # dpg.add_image(icons.apply("eye"))
-            
-            # This requires the self.__toggle.tick() to be in __on__tick()
-            
-            # self.__toggle = Toggle(  
-            #     parent="main_window",
-            #     label="Enable Feature",
-            #     default=False,
-            #     width=44,
-            #     height=24,
-            # ).build()
-            
-        
+
         dpg.set_primary_window("main_window", True)
-        
         dpg.show_viewport()
         
         themes.register() 
-        
         themes.apply("main_window", themes.primary)
 
         self.__register_handlers()
         
-        
         logger.success("App Started")
         
         while dpg.is_dearpygui_running():
-            
             self.__on_tick()
-            
-            
             dpg.render_dearpygui_frame()
             
         dpg.destroy_context()

@@ -1,10 +1,8 @@
-from loguru import logger
 from trainer.ui.components.base import BaseComponent
 import dearpygui.dearpygui as dpg
-from trainer.ui.styles import fonts, themes
-from trainer.ui.components.image_btn import ImageBtn
 from trainer.ui.animations.animations import ColorTransition
 from trainer.ui.common.math import Math
+from trainer.ui.styles import fonts, themes
 
 class HeaderComponent(BaseComponent):
     
@@ -37,4 +35,4 @@ class HeaderComponent(BaseComponent):
         super().build()
         
         
-    
+    def tick(self) -> None: pass

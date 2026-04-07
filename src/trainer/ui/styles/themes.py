@@ -9,9 +9,8 @@ from loguru import logger
 class Themes(BaseStyle):
 
     __BG_PRIMARY: ClassVar[tuple] = (14, 14, 14, 255)
-    __BG_HEADER: ClassVar[tuple] = (20, 20, 20, 255)
-    __BG_NAVBAR: ClassVar[tuple] = (20, 20, 20, 255)
-
+    __BG_SECONDARY: ClassVar[tuple] = (20, 20, 20, 255)
+    
     __WINDOW_RADIUS: ClassVar[int] = 2
     __WINDOW_OPACITY: ClassVar[int] = 235
     __CHROMA_KEY: ClassVar[int] = 0x0000FF00
@@ -54,16 +53,56 @@ class Themes(BaseStyle):
                 dpg.add_theme_style(dpg.mvStyleVar_ChildBorderSize, 0)
                 dpg.add_theme_style(dpg.mvStyleVar_ScrollbarSize, 10)
                 dpg.add_theme_style(dpg.mvStyleVar_ScrollbarRounding, 6)
-                dpg.add_theme_color(dpg.mvThemeCol_ChildBg, self.__BG_NAVBAR)
+                dpg.add_theme_color(dpg.mvThemeCol_ChildBg, self.__BG_SECONDARY)
         return theme
     
+    @property
+    def footer_text(self) -> int:
+        with dpg.theme() as theme:
+            with dpg.theme_component(dpg.mvChildWindow):
+                dpg.add_theme_style(dpg.mvStyleVar_ChildRounding, 6)
+                dpg.add_theme_style(dpg.mvStyleVar_ChildBorderSize, 0)
+                dpg.add_theme_style(dpg.mvStyleVar_ScrollbarSize, 10)
+                dpg.add_theme_style(dpg.mvStyleVar_ScrollbarRounding, 6)
+                dpg.add_theme_color(dpg.mvThemeCol_ChildBg, self.__BG_PRIMARY)
+        return theme
+    
+    @property
+    def footer_error(self) -> int:
+        """
+        Returns the theme identifier for the footer error state.
+        
+        Applies a rounded child window style and sets the text color to red.
+        """
+        with dpg.theme() as theme:
+            with dpg.theme_component(dpg.mvChildWindow):
+                dpg.add_theme_style(dpg.mvStyleVar_ChildRounding, 6)
+                dpg.add_theme_style(dpg.mvStyleVar_ChildBorderSize, 0)
+                dpg.add_theme_style(dpg.mvStyleVar_ScrollbarSize, 10)
+                dpg.add_theme_style(dpg.mvStyleVar_ScrollbarRounding, 6)
+                dpg.add_theme_color(dpg.mvThemeCol_ChildBg, self.__BG_PRIMARY)
+            with dpg.theme_component(dpg.mvText):
+                dpg.add_theme_color(dpg.mvThemeCol_Text, [255, 0, 0, 255])
+                
+        return theme
+    
+    @property
+    def discord_icon(self) -> int:
+        with dpg.theme() as theme:
+            with dpg.theme_component(dpg.mvChildWindow):
+                dpg.add_theme_style(dpg.mvStyleVar_ChildRounding, 6)
+                dpg.add_theme_style(dpg.mvStyleVar_ChildBorderSize, 0)
+                dpg.add_theme_style(dpg.mvStyleVar_ScrollbarSize, 10)
+                dpg.add_theme_style(dpg.mvStyleVar_ScrollbarRounding, 6)
+                dpg.add_theme_color(dpg.mvThemeCol_ChildBg, (255,255,255,255))
+        return theme 
     @property
     def navbar_btn_container(self) -> int:
         with dpg.theme() as theme:
             with dpg.theme_component(dpg.mvChildWindow):
                 dpg.add_theme_style(dpg.mvStyleVar_ChildRounding, 6)
                 dpg.add_theme_style(dpg.mvStyleVar_ChildBorderSize, 0)
-                dpg.add_theme_color(dpg.mvThemeCol_ChildBg, self.__BG_NAVBAR)
+                dpg.add_theme_color(dpg.mvThemeCol_ChildBg, self.__BG_SECONDARY)
         return theme
     
     @property
@@ -73,7 +112,7 @@ class Themes(BaseStyle):
                 dpg.add_theme_style(dpg.mvStyleVar_WindowRounding, 0)
                 dpg.add_theme_style(dpg.mvStyleVar_WindowBorderSize, 0)
                 dpg.add_theme_style(dpg.mvStyleVar_WindowPadding, 0, 0)
-                dpg.add_theme_color(dpg.mvThemeCol_ChildBg, self.__BG_HEADER)
+                dpg.add_theme_color(dpg.mvThemeCol_ChildBg, self.__BG_SECONDARY)
         return theme
     
     @property

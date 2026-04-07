@@ -97,7 +97,10 @@ class BaseValue(ABC):
             fov.get()  # → 1.0
         ```
         """
-
+        if not self.__conn.is_alive:
+            logger.warning(f"{self.__class__.__name__}.get() called while disconnected")
+            return None
+        
         addr: Address | None = self._resolve()
 
         if addr is None:
@@ -146,7 +149,10 @@ class BaseValue(ABC):
             fov.set(1.5)  # → True
         ```
         """
-
+        if not self.__conn.is_alive:
+            logger.warning(f"{self.__class__.__name__}.set() called while disconnected")
+            return False
+        
         addr: Address | None = self._resolve()
 
         if addr is None:

@@ -2,7 +2,6 @@ from loguru import logger
 from trainer.ui.components.base import BaseComponent
 import dearpygui.dearpygui as dpg
 from trainer.ui.styles import fonts, themes, icons
-from trainer.ui.components.image_btn import ImageBtn
 from trainer.ui.animations.animations import UnderlineTransition
 from trainer.ui.common.math import Math
 
