@@ -30,22 +30,5 @@ python src/trainer/main.py
 
 ****
 
-## Project Structure
-```text
-src/
-└── trainer/
-    ├── core/
-    │   ├── memory_connection.py   # Process handle and module base resolution
-    │   └── registry.py            # TYPE_REGISTRY — pymem read/write method map
-    ├── values/
-    │   ├── base_value.py          # BaseValue ABC — template method pattern
-    │   └── fov.py                 # FovValue — concrete implementation
-    ├── ui/                        # UI panels (WIP)
-    ├── game.py                    # ShooterGame — composition root
-    └── main.py                    # Entry point
-```
-
-****
-
 ## License
 This project is licensed under the **GNU General Public License v3.0**. See [LICENSE](LICENSE) for details.
