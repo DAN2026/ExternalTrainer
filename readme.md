@@ -1,10 +1,37 @@
 # Memory Tool
 
-A modular, extensible memory trainer for ARK: Survival Evolved built with Python.
+![Python Version](https://img.shields.io/badge/Python-3.12+-blue)
+![License](https://img.shields.io/badge/LICENSE-GPL--3.0-red)
+
+****
+
+An educational, modular, and extensible memory training architecture built in Python to demonstrate runtime process data parsing and pointer structures.
+
+****
+
+## Dependencies
+| Name | Version | Purpose |
+| :--- | :---: | :--- |
+| **Python** | `3.12+` | Core Runtime Environment |
+| **Pymem** | `Latest` | Process Memory Inspection Interface |
+| **Loguru** | `Latest` | Structured Diagnostic Logging |
+
+## Installation
+1. Ensure you have **Python 3.12+** installed.
+2. Clone or download this repository.
+3. Install the required dependencies:
+```bash
+pip install pymem loguru
+```
+4. Run the entry point:
+```bash
+python src/trainer/main.py
+```
+
+****
 
 ## Project Structure
-
-```
+```text
 src/
 └── trainer/
     ├── core/
@@ -18,70 +45,7 @@ src/
     └── main.py                    # Entry point
 ```
 
-## Requirements
+****
 
-- Python 3.12+
-- pymem
-- loguru
-
-## Installation
-
-Clone the repository and install in editable mode:
-
-```powershell
-git clone <repo>
-cd ark_ini
-pip install -e .
-```
-
-## Usage
-
-```powershell
-python src/trainer/main.py
-```
-
-## Adding a New Value
-
-1. Create a new file in `src/trainer/values/`
-2. Subclass `BaseValue` and supply the three required properties
-3. Register it in `game.py`
-
-```python
-# src/trainer/values/health.py
-from trainer.values.base_value import BaseValue
-
-class HealthValue(BaseValue):
-    base_offset = 0x04123456
-    offsets     = [0x10, 0x20, 0x30]
-    value_type  = "int"
-```
-
-```python
-# src/trainer/game.py
-from trainer.values.health import HealthValue
-
-class ShooterGame:
-    def __init__(self):
-        conn = MemoryConnection("ShooterGame.exe")
-        self.fov    = FovValue(conn)
-        self.health = HealthValue(conn)  # ← one new line
-```
-
-## Supported Types
-
-| Key          | Python type |
-|--------------|-------------|
-| `float`      | `float`     |
-| `double`     | `float`     |
-| `int`        | `int`       |
-| `uint`       | `int`       |
-| `short`      | `int`       |
-| `ushort`     | `int`       |
-| `long`       | `int`       |
-| `ulong`      | `int`       |
-| `longlong`   | `int`       |
-| `ulonglong`  | `int`       |
-| `bool`       | `bool`      |
-| `char`       | `bytes`     |
-| `uchar`      | `int`       |
-| `bytes`      | `bytes`     |
+## License
+This project is licensed under the **GNU General Public License v3.0**. See [LICENSE](LICENSE) for details.
