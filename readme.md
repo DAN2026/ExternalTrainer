@@ -1,4 +1,4 @@
-# ARK Trainer
+# Memory Tool
 
 A modular, extensible memory trainer for ARK: Survival Evolved built with Python.
 
