@@ -1,87 +1,34 @@
-# ARK Trainer
+# Memory Tool
 
-A modular, extensible memory trainer for ARK: Survival Evolved built with Python.
+![Python Version](https://img.shields.io/badge/Python-3.12+-blue)
+![License](https://img.shields.io/badge/LICENSE-GPL--3.0-red)
 
-## Project Structure
+****
 
-```
-src/
-└── trainer/
-    ├── core/
-    │   ├── memory_connection.py   # Process handle and module base resolution
-    │   └── registry.py            # TYPE_REGISTRY — pymem read/write method map
-    ├── values/
-    │   ├── base_value.py          # BaseValue ABC — template method pattern
-    │   └── fov.py                 # FovValue — concrete implementation
-    ├── ui/                        # UI panels (WIP)
-    ├── game.py                    # ShooterGame — composition root
-    └── main.py                    # Entry point
-```
+A memory tool made to modify memory of processes at runtime.
 
-## Requirements
+****
 
-- Python 3.12+
-- pymem
-- loguru
+## Dependencies
+| Name | Version | Purpose |
+| :--- | :---: | :--- |
+| **Python** | `3.12+` | Core Runtime Environment |
+| **Pymem** | `Latest` | Process Memory Inspection Interface |
+| **Loguru** | `Latest` | Structured Diagnostic Logging |
 
 ## Installation
-
-Clone the repository and install in editable mode:
-
-```powershell
-git clone <repo>
-cd ark_ini
-pip install -e .
+1. Ensure you have **Python 3.12+** installed.
+2. Clone or download this repository.
+3. Install the required dependencies:
+```bash
+pip install pymem loguru
 ```
-
-## Usage
-
-```powershell
+4. Run the entry point:
+```bash
 python src/trainer/main.py
 ```
 
-## Adding a New Value
+****
 
-1. Create a new file in `src/trainer/values/`
-2. Subclass `BaseValue` and supply the three required properties
-3. Register it in `game.py`
-
-```python
-# src/trainer/values/health.py
-from trainer.values.base_value import BaseValue
-
-class HealthValue(BaseValue):
-    base_offset = 0x04123456
-    offsets     = [0x10, 0x20, 0x30]
-    value_type  = "int"
-```
-
-```python
-# src/trainer/game.py
-from trainer.values.health import HealthValue
-
-class ShooterGame:
-    def __init__(self):
-        conn = MemoryConnection("ShooterGame.exe")
-        self.fov    = FovValue(conn)
-        self.health = HealthValue(conn)  # ← one new line
-```
-
-## Supported Types
-
-| Key          | Python type |
-|--------------|-------------|
-| `float`      | `float`     |
-| `double`     | `float`     |
-| `int`        | `int`       |
-| `uint`       | `int`       |
-| `short`      | `int`       |
-| `ushort`     | `int`       |
-| `long`       | `int`       |
-| `ulong`      | `int`       |
-| `longlong`   | `int`       |
-| `ulonglong`  | `int`       |
-| `bool`       | `bool`      |
-| `char`       | `bytes`     |
-| `uchar`      | `int`       |
-| `bytes`      | `bytes`     |
+## License
+This project is licensed under the **GNU General Public License v3.0**. See [LICENSE](LICENSE) for details.

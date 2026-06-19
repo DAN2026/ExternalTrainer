@@ -105,7 +105,7 @@ class ScaleTransition:
         target: str | int,
         base_w: int,
         base_h: int,
-        scale: float = 1.2,  # 1.2 = 20% larger on hover
+        scale: float = 1.2, 
         duration: float = 0.15,
     ):
         self.__target = target
@@ -145,8 +145,8 @@ class SlideTransition:
         duration: float = 0.25,
     ):
         self.__target = target
-        self.__active_x = active_x  # Where the page sits when visible (e.g., 12.5)
-        self.__offscreen_x = offscreen_x  # Where it hides (e.g., 500 or -500)
+        self.__active_x = active_x  
+        self.__offscreen_x = offscreen_x  
         self.__y = y
         self.__duration = duration
         self.__t = 0.0
@@ -155,7 +155,7 @@ class SlideTransition:
 
     def set_state(self, active: bool):
         self.__active = active
-        # Ensure the item is 'shown' so it can actually animate
+        
         dpg.configure_item(self.__target, show=True)
 
     def tick(self):
@@ -169,11 +169,9 @@ class SlideTransition:
             self.__t += direction * (delta / self.__duration)
             self.__t = max(0.0, min(1.0, self.__t))
 
-            # Use your existing lerp function
             current_x = lerp(self.__offscreen_x, self.__active_x, self.__t)
             dpg.set_item_pos(self.__target, [current_x, self.__y])
 
-            # Optimization: Hide the item once it's fully off-screen
             if self.__t <= 0.0 and not self.__active:
                 dpg.configure_item(self.__target, show=False)
 
