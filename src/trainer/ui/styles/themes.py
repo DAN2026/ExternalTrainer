@@ -76,6 +76,27 @@ class Themes(BaseStyle):
                 dpg.add_theme_color(dpg.mvThemeCol_ChildBg, self.__BG_SECONDARY)
         return theme
 
+
+    @property
+    def keybind_btn(self) -> int:
+        """
+        Theme for the KeybindButton component using the third background tier.
+        """
+        with dpg.theme() as theme:
+            with dpg.theme_component(dpg.mvButton):
+                dpg.add_theme_color(dpg.mvThemeCol_Button, (26, 26, 26, 255))
+                dpg.add_theme_color(dpg.mvThemeCol_ButtonHovered, (32, 32, 32, 255))
+                dpg.add_theme_color(dpg.mvThemeCol_ButtonActive, self.__BLUE)
+                
+                dpg.add_theme_style(dpg.mvStyleVar_FrameRounding, 4)
+                dpg.add_theme_style(dpg.mvStyleVar_FrameBorderSize, 0)
+                dpg.add_theme_style(dpg.mvStyleVar_FramePadding, 4, 4)
+                
+            with dpg.theme_component(dpg.mvText):
+                dpg.add_theme_color(dpg.mvThemeCol_Text, (220, 220, 220, 255))
+                
+        return theme
+
     @property
     def tooltip(self) -> int:
         """
@@ -161,6 +182,26 @@ class Themes(BaseStyle):
                 dpg.add_theme_style(dpg.mvStyleVar_ChildRounding, 6)
                 dpg.add_theme_style(dpg.mvStyleVar_ChildBorderSize, 0)
                 dpg.add_theme_style(dpg.mvStyleVar_WindowPadding, 0, 0)
+        return theme
+    
+    @property
+    def navbar_dropdown(self) -> int:
+        """
+        Theme for navbar_dropdown with specific styling.
+        """
+        with dpg.theme() as theme:
+            with dpg.theme_component(dpg.mvAll):
+                dpg.add_theme_style(dpg.mvStyleVar_WindowRounding, 8)
+                dpg.add_theme_style(dpg.mvStyleVar_WindowBorderSize, 0)
+                dpg.add_theme_style(dpg.mvStyleVar_WindowPadding, 4, 4)
+                dpg.add_theme_style(dpg.mvStyleVar_FrameRounding, 4)
+                dpg.add_theme_style(dpg.mvStyleVar_FramePadding, 4, 4)
+                
+                dpg.add_theme_color(dpg.mvThemeCol_WindowBg, self.__BG_PRIMARY)
+                dpg.add_theme_color(dpg.mvThemeCol_Text, (255, 255, 255, 255))
+                dpg.add_theme_color(dpg.mvThemeCol_Button, self.__BG_PRIMARY)
+                dpg.add_theme_color(dpg.mvThemeCol_ButtonHovered, (36, 36, 36, 255))
+
         return theme
 
     @property

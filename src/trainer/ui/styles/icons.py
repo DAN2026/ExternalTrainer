@@ -24,7 +24,9 @@ class Icons(BaseStyle):
         "arkopedia",
         "logout",
         "folder",
-        "stats"
+        "stats",
+        "tool",
+        "search"
     ]
 
     def register(self) -> None:

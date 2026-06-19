@@ -33,7 +33,7 @@ class ToggleRowComponent:
     DEFAULT_WIDTH: float = 400.0
     DEFAULT_HEIGHT: int = 45
     DEFAULT_PADDING_LEFT: float = 5.0
-    DEFAULT_PADDING_BOTTOM: float = 5.0
+    DEFAULT_PADDING_BOTTOM: float = 0.5
     DEFAULT_BG: Tuple[int, int, int, int] = (16, 16, 16, 255)
     DEFAULT_HOVER: Tuple[int, int, int, int] = (28, 28, 28, 255)
 

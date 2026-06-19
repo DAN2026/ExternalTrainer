@@ -14,6 +14,9 @@ class MouseHandler(BaseHandler):
 
     __EXCLUSIONS: ClassVar[List[str]] = [
         "visual-container",
+        "visual-display",
+        "visual-ini",
+        "settings-keys",
     ]
 
     __slots__ = ()

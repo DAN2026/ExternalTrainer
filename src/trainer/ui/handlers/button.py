@@ -33,6 +33,8 @@ class ButtonHandler:
         self.on_click: Optional[Callable[[str], None]] = on_click
         self.on_hover: Optional[Callable[[str], None]] = on_hover
         self.__is_hovered: bool = False
+        
+        super().__init__()
 
     def update(self) -> None:
         

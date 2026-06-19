@@ -11,7 +11,12 @@ from trainer.ui.components.reconnect import ReconnectButtonComponent
 from trainer.ui.components.text import TextComponent
 from trainer.ui.styles import themes, fonts
 from trainer.ui.animations.color import ColorTransition
-from trainer.events.signals import on_connection_change, request_reconnect, request_shutdown
+from trainer.events.signals import (
+    on_connection_change, 
+    request_reconnect, 
+    request_shutdown, 
+    on_game_lock_change
+)
 
 
 class FooterComponent(BaseComponent):
@@ -35,6 +40,7 @@ class FooterComponent(BaseComponent):
         "__logout_btn",
         "__status_label",
         "__prompt_label",
+        "__lock_status_label",
         "__seperator",
         "__status",
         "__transitions",
@@ -44,7 +50,7 @@ class FooterComponent(BaseComponent):
 
     def __init__(self) -> None:
         """
-        Initializes the footer and connects the connection change signal.
+        Initializes the footer and connects the UI communication signals.
         """
         super().__init__()
         self.__icons: List[IconButtonComponent] = []
@@ -52,13 +58,15 @@ class FooterComponent(BaseComponent):
         self.__logout_btn: Optional[IconButtonComponent] = None
         self.__status_label: Optional[TextComponent] = None
         self.__prompt_label: Optional[TextComponent] = None
+        self.__lock_status_label: Optional[TextComponent] = None
         self.__seperator: Optional[VerticalSeparatorComponent] = None
         self.__status: str = "Disconnected"
         self.__transitions: List[ColorTransition] = []
         self.__prompt_timer: Optional[threading.Timer] = None
         self.__reconnect_timer: Optional[threading.Timer] = None
 
-        on_connection_change.connect(self.__on_connection_signal)
+        on_connection_change.connect(self.__on_connection_signal, weak=False)
+        on_game_lock_change.connect(self.__on_lock_signal, weak=False)
 
     def build(self) -> None:
         """
@@ -77,7 +85,7 @@ class FooterComponent(BaseComponent):
         self.__prompt_label = TextComponent(
             tag="footer_prompt_text",
             text="",
-            pos=[self.__X_POS + 75, self.__Y_POS + 10],
+            pos=[self.__X_POS + 75, self.__Y_POS - 7.5],
             width=250,
             height=20,
             y_indent=0,
@@ -86,6 +94,18 @@ class FooterComponent(BaseComponent):
             theme=themes.footer_error,
         )
         self.__prompt_label.build()
+
+        self.__lock_status_label = TextComponent(
+            tag="footer_lock_text",
+            text="Menu: Unlocked",
+            pos=[self.__X_POS + 75, self.__Y_POS + 10],
+            width=200,
+            height=20,
+            y_indent=0,
+            font=fonts.font_bold_18,
+            theme=themes.footer_text,
+        )
+        self.__lock_status_label.build()
 
         self.__status_label = TextComponent(
             tag="footer_status_text",
@@ -193,6 +213,26 @@ class FooterComponent(BaseComponent):
         if self.__reconnect_btn:
             self.__reconnect_btn.tick()
 
+    def __on_lock_signal(self, sender: Any, locked: bool, **kwargs: Any) -> None:
+        """
+        Updates the lock status label text and theme when the signal is received.
+        """
+        if not self.__lock_status_label:
+            return
+
+        text: str = "Menu: Locked" if locked else "Menu: Unlocked"
+        theme: Any = themes.footer_error if locked else themes.footer_text
+
+        self.__lock_status_label.set_text(text)
+        if dpg.does_item_exist(self.__lock_status_label.tag):
+            dpg.bind_item_theme(self.__lock_status_label.tag, theme)
+
+    def __on_connection_signal(self, sender: Any, connected: bool, **kwargs: Any) -> None:
+        """
+        Updates the footer status when a connection signal is received.
+        """
+        self.set_status(connected)
+
     def __cancel_prompt_timer(self) -> None:
         """
         Cancels any pending prompt hide timer.
@@ -231,12 +271,6 @@ class FooterComponent(BaseComponent):
         )
         self.__prompt_timer.daemon = True
         self.__prompt_timer.start()
-
-    def __on_connection_signal(self, sender: Any, connected: bool, **kwargs: Any) -> None:
-        """
-        Updates the footer status when a connection signal is received.
-        """
-        self.set_status(connected)
 
     def __execute_reconnect_logic(self, tag: str) -> None:
         """

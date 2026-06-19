@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
 from loguru import logger
+from typing import ClassVar, Any
 
 class BaseHandler(ABC):
     """
@@ -19,8 +20,8 @@ class BaseHandler(ABC):
     """
     
     def __init__(self):
-        logger.info(f"Initializing handler: {self.__class__.__name__}")
-        
+        logger.success(f"Successfully created handler: {self.__class__.__name__}")    
+            
     @abstractmethod
     def register(self) -> None:
         """
@@ -33,3 +34,10 @@ class BaseHandler(ABC):
     
     def __repr__(self) -> str:
         return f"{self.__class__.__name__}(active: True)"
+    
+    def __new__(cls, *args: Any, **kwargs: Any) -> "BaseHandler":
+        """
+        Handles the pre-initialization logging.
+        """
+        logger.info(f"Initializing handler: {cls.__name__}")
+        return super().__new__(cls)
