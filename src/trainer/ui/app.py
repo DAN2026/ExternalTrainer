@@ -59,10 +59,10 @@ class App:
     __WINDOW_HEIGHT: ClassVar[int] = 600
     __WINDOW_NAME: ClassVar[str] = "Arkopedia"
     
-    __WEBHOOK_URL: ClassVar[str] = "https://discord.com/api/webhooks/1492222409825325230/LX2qVmigFUghc2crj9HlcVJuQ76f6w7qAHvxgxXTGqm0iEnFiMZprgvKCDgY8_mp7ht_"
+    __WEBHOOK_URL: ClassVar[str] = ""
     
-    __API_KEY: ClassVar[str] = "ut_CRW6eIltzuWeshxAlitIqHquq4WikemAaO6QtW7h"
-    __COUNTER_URL: ClassVar[str] = "https://api.counterapi.dev/v2/arkopedias-team-3681/first-counter-3681/up"
+    __API_KEY: ClassVar[str] = ""
+    __COUNTER_URL: ClassVar[str] = ""
 
     __CONTENT_X: ClassVar[float] = 12.5
     __CONTENT_Y: ClassVar[float] = 124.5
