@@ -12,9 +12,9 @@ A memory tool made to modify memory of processes at runtime.
 ## Dependencies
 | Name | Version | Purpose |
 | :--- | :---: | :--- |
-| **Python** | `3.12+` | Core Runtime Environment |
-| **Pymem** | `Latest` | Process Memory Inspection Interface |
-| **Loguru** | `Latest` | Structured Diagnostic Logging |
+| **Python** | `3.12+` | Lang |
+| **Pymem** | `Latest` | Memory Lib |
+| **Loguru** | `Latest` | Logging Lib |
 
 ## Installation
 1. Ensure you have **Python 3.12+** installed.
